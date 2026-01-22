@@ -1,0 +1,24 @@
+__include__: [
+  '../dataset/coco_detection.yml',
+  '../runtime.yml',
+  './include/dataloader.yml',
+  './include/optimizer.yml',
+  './include/rtdetrv2_r18vd.yml',
+]
+
+# 1. Update this to 10 for the RDD dataset classes
+num_classes: 10
+remap_mscoco_category: False
+
+# 2. Update these paths to where you saved the download
+train_dataloader:
+  dataset: 
+    img_folder: C:/Users/jazzb/datasets/RDD-Object-Detection-Dataset/train/
+    ann_file: C:/Users/jazzb/datasets/RDD-Object-Detection-Dataset/train/_annotations.coco.json
+  batch_size: 4 # Keep it at 4 to avoid Out of Memory errors on Windows
+
+val_dataloader:
+  dataset: 
+    img_folder: C:/Users/jazzb/datasets/RDD-Object-Detection-Dataset/valid/
+    ann_file: C:/Users/jazzb/datasets/RDD-Object-Detection-Dataset/valid/_annotations.coco.json
+  batch_size: 4
