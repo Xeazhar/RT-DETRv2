@@ -1,16 +1,22 @@
 # Inside configs/dataset/coco_detection.yml
-task: detection
+# task: detection
+
+# train_dataloader:
+#   dataset: 
+#     img_folder: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/RDD-Object-Detection-Dataset/train
+#     ann_file: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/RDD-Object-Detection-Dataset/train/refined_annotations.json
+
+# val_dataloader:
+#   dataset: 
+#     img_folder: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/RDD-Object-Detection-Dataset/valid
+#     ann_file: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/RDD-Object-Detection-Dataset/valid/refined_annotations.json
 
 train_dataloader:
-  dataset: 
-    img_folder: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/RDD-Object-Detection-Dataset/train
-    ann_file: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/RDD-Object-Detection-Dataset/train/_annotations.coco.json
-    transforms:
-      ops: ~
+  dataset:
+    ann_file: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/RDD-Object-Detection-Dataset/train/subset_100.json
+    img_folder: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/RDD-Object-Detection-Dataset/train/
 
 val_dataloader:
-  dataset: 
-    img_folder: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/RDD-Object-Detection-Dataset/valid
-    ann_file: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/RDD-Object-Detection-Dataset/valid/_annotations.coco.json
-    transforms:
-      ops: ~
+  dataset:
+    ann_file: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/RDD-Object-Detection-Dataset/valid/subset_100.json
+    img_folder: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/RDD-Object-Detection-Dataset/valid/

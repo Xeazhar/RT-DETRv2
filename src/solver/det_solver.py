@@ -1,19 +1,15 @@
-"""Copyright(c) 2023 lyuwenyu. All Rights Reserved.
+"""
+Copyright(c) 2023 lyuwenyu. All Rights Reserved.
 """
 
 import time 
 import json
 import datetime
-
 import torch 
 
 from ..misc import dist_utils, profiler_utils
-
 from ._solver import BaseSolver
 from .det_engine import train_one_epoch, evaluate
-
-# from supervisely.nn.training import train_logger
-
 
 class DetSolver(BaseSolver):
     
@@ -28,17 +24,18 @@ class DetSolver(BaseSolver):
         best_stat = {'epoch': -1, }
 
         start_time = time.time()
-        start_epcoch = self.last_epoch + 1
+        start_epoch = self.last_epoch + 1
 
-#         train_logger.train_started(total_epochs=(args.epoches - start_epcoch))
-        for epoch in range(start_epcoch, args.epoches):
-
-            self.train_dataloader.set_epoch(epoch)
-            # self.train_dataloader.dataset.set_epoch(epoch)
-            if dist_utils.is_dist_available_and_initialized():
-                self.train_dataloader.sampler.set_epoch(epoch)
+        for epoch in range(start_epoch, args.epoches):
+            # --- FIX: Standard DataLoader on Windows doesn't have set_epoch ---
+            if hasattr(self.train_dataloader, 'set_epoch'):
+                self.train_dataloader.set_epoch(epoch)
             
-#             train_logger.epoch_started(total_steps=len(self.train_dataloader))
+            if dist_utils.is_dist_available_and_initialized():
+                if hasattr(self.train_dataloader.sampler, 'set_epoch'):
+                    self.train_dataloader.sampler.set_epoch(epoch)
+            # -----------------------------------------------------------------
+            
             train_stats = train_one_epoch(
                 self.model, 
                 self.criterion, 
@@ -61,7 +58,6 @@ class DetSolver(BaseSolver):
 
             if self.output_dir:
                 checkpoint_paths = [self.output_dir / 'last.pth']
-                # extra checkpoint before LR drop and every 100 epochs
                 if (epoch + 1) % args.checkpoint_freq == 0:
                     checkpoint_paths.append(self.output_dir / f'checkpoint{epoch + 1:04}.pth')
                 for checkpoint_path in checkpoint_paths:
@@ -79,7 +75,6 @@ class DetSolver(BaseSolver):
                 self.device
             )
 
-            # TODO 
             for k in test_stats:
                 if self.writer and dist_utils.is_main_process():
                     for i, v in enumerate(test_stats[k]):
@@ -110,7 +105,6 @@ class DetSolver(BaseSolver):
                 with (self.output_dir / "log.txt").open("a") as f:
                     f.write(json.dumps(log_stats) + "\n")
 
-                # for evaluation logs
                 if coco_evaluator is not None:
                     (self.output_dir / 'eval').mkdir(exist_ok=True)
                     if "bbox" in coco_evaluator.coco_eval:
@@ -120,19 +114,13 @@ class DetSolver(BaseSolver):
                         for name in filenames:
                             torch.save(coco_evaluator.coco_eval["bbox"].eval,
                                     self.output_dir / "eval" / name)
-                            
-#             train_logger.epoch_finished()
-
-#         train_logger.train_finished()
 
         total_time = time.time() - start_time
         total_time_str = str(datetime.timedelta(seconds=int(total_time)))
         print('Training time {}'.format(total_time_str))
 
-
     def val(self, ):
         self.eval()
-        
         module = self.ema.module if self.ema else self.model
         test_stats, coco_evaluator = evaluate(module, self.criterion, self.postprocessor,
                 self.val_dataloader, self.evaluator, self.device)
@@ -143,7 +131,12 @@ class DetSolver(BaseSolver):
         return
 
     def _strip_state_dict(self, state_dict):
-        if not self.cfg.yaml_cfg['save_optimizer'] and "optimizer" in state_dict:
+        # Use .get() to safely handle missing YAML keys
+        save_optimizer = self.cfg.yaml_cfg.get('save_optimizer', False)
+        save_ema = self.cfg.yaml_cfg.get('save_ema', True)
+
+        if not save_optimizer and "optimizer" in state_dict:
             state_dict.pop("optimizer")
-        if not self.cfg.yaml_cfg['save_ema'] and "ema" in state_dict:
-            state_dict.pop("model")  # keep ema as a model
+        
+        if not save_ema and "ema" in state_dict:
+            state_dict.pop("ema")

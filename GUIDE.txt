@@ -1,0 +1,12 @@
+#To check the tensorflow Tables
+(RT) C:\Users\jazzb\rt-deterv2\RT-DETRv2>tensorboard --logdir=output/rtdetrv2_r50vd_m_6x_coco
+
+#Parameter,File Location,Key to Look For
+
+Epoch Count,configs/rtdetrv2/rtdetrv2_r50vd_m_7x_coco.yml,epoches: 10
+Batch Size,configs/rtdetrv2/include/dataloader.yml,total_batch_size: 4
+Learning Rate,configs/rtdetrv2/rtdetrv2_r50vd_m_7x_coco.yml,optimizer: lr: 0.0001
+Num Workers,configs/rtdetrv2/include/dataloader.yml,num_workers: 4
+
+#To run the training
+(RT) C:\Users\jazzb\rt-deterv2\RT-DETRv2>python tools/train.py -c configs/rtdetrv2/rtdetrv2_r50vd_m_7x_coco.yml
