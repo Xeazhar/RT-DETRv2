@@ -7,7 +7,7 @@ __include__: [
 ]
 
 # 1. Update this to 10 for the RDD dataset classes
-num_classes: 10
+num_classes: 3
 remap_mscoco_category: False
 
 # 2. Update these paths to where you saved the download
