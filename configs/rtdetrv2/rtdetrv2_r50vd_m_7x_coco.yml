@@ -17,14 +17,14 @@ RTDETRTransformerv2:
   eval_idx: 2 # use 3th decoder layer to eval
 
 
-epoches: 10
+epoches: 100
 
 optimizer:
   type: AdamW
   params: 
     - 
       params: '^(?=.*backbone)(?!.*norm).*$'
-      lr: 0.00001
+      lr: 0.0001
     - 
       params: '^(?=.*(?:encoder|decoder))(?=.*(?:norm|bn)).*$'
       weight_decay: 0.
@@ -39,9 +39,9 @@ train_dataloader:
     type: CocoDetection
     transforms:
       policy:
-        epoch: 10
+        epoch: 100
   collate_fn:
-    stop_epoch: 10
+    stop_epoch: 100
 
 evaluator:
   type: CocoEvaluator

@@ -10,3 +10,7 @@ Num Workers,configs/rtdetrv2/include/dataloader.yml,num_workers: 4
 
 #To run the training
 (RT) C:\Users\jazzb\rt-deterv2\RT-DETRv2>python tools/train.py -c configs/rtdetrv2/rtdetrv2_r50vd_m_7x_coco.yml
+
+#To run Kfold(5)
+
+run_kfold.bat

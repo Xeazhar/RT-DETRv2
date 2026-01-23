@@ -1,6 +1,6 @@
 # Philippine Road Damage Detection with RT-DETRv2
 
-<<<<<<< HEAD
+
 This project implements a fine-tuned RT-DETRv2 (Real-Time Detection Transformer) model for the identification of road surface hazards in the Philippines. The system is designed to provide high-speed, automated detection of potholes and cracks to assist in infrastructure monitoring and road safety.
 
 ## Project Overview
@@ -8,6 +8,8 @@ The model is trained to detect three specific classes of road damage:
 * **Pothole**: Structural depressions in the road surface.
 * **Alligator Crack**: Interconnected fatigue cracking patterns.
 * **Crack**: Standard longitudinal or transverse surface breaks.
+* **Revelling**: The progressive disintegration of an asphalt layer from the surface downward as aggregate particles are dislodged.
+* **Open Manhole**: Uncovered or damaged utility access points that pose a severe safety risk to vehicles and pedestrians.
 
 ---
 
@@ -16,7 +18,7 @@ Key training and data settings are located in the following configuration files:
 
 | Parameter | Configuration File Location | Key |
 | :--- | :--- | :--- |
-| **Epoch Count** | `configs/rtdetrv2/rtdetrv2_r50vd_m_7x_coco.yml` | `epoches: 84` |
+| **Epoch Count** | `configs/rtdetrv2/rtdetrv2_r50vd_m_7x_coco.yml` | `epoches: 20` |
 | **Batch Size** | `configs/rtdetrv2/include/dataloader.yml` | `total_batch_size: 4` |
 | **Learning Rate** | `configs/rtdetrv2/rtdetrv2_r50vd_m_7x_coco.yml` | `lr: 0.0001` |
 | **Num Workers** | `configs/rtdetrv2/include/dataloader.yml` | `num_workers: 4` |
@@ -32,9 +34,11 @@ To initiate training or resume from the last saved checkpoint, run the following
 # Start New Training
 python tools/train.py -c configs/rtdetrv2/rtdetrv2_r50vd_m_7x_coco.yml
 
-# Resume Training
-python tools/train.py -c configs/rtdetrv2/rtdetrv2_r50vd_m_7x_coco.yml -r output/rtdetrv2_r50vd_m_6x_coco/last.pth
+#To run Kfold(5)
 
+run_kfold.bat
+
+---
 
 Citation
 @misc{lv2024rtdetrv2improvedbaselinebagoffreebies,
@@ -46,5 +50,3 @@ Citation
       primaryClass={cs.CV},
       url={[https://arxiv.org/abs/2407.17140](https://arxiv.org/abs/2407.17140)}, 
 }
-=======
->>>>>>> bbbd060af696b8e5132c1abc9e61e1e407d12c85

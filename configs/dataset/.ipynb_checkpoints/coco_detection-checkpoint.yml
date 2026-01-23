@@ -5,9 +5,9 @@ train_dataloader:
     img_folder: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/DPWH-sample-Dataset/train/
     ann_file: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/DPWH-sample-Dataset/train/instances_train_fixed.json
 
-
 val_dataloader:
   dataset: 
-    img_folder: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/DPWH-sample-Dataset/validation/
+    # CHANGE THIS: Point it to 'train' because your K-Fold JSONs 
+    # reference images located in the train folder.
+    img_folder: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/DPWH-sample-Dataset/train/
     ann_file: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/DPWH-sample-Dataset/validation/instances_validation_fixed.json
- 
