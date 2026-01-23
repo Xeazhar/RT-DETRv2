@@ -11,6 +11,8 @@ from src.misc import dist_utils
 from src.core import YAMLConfig, yaml_utils
 from src.solver import TASKS
 
+from PIL import Image
+Image.MAX_IMAGE_PIXELS = None  # Removes the limit entirely
 
 def main(args, ) -> None:
     """main
