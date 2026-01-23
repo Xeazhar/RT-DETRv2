@@ -1,5 +1,6 @@
 # Philippine Road Damage Detection with RT-DETRv2
 
+<<<<<<< HEAD
 This project implements a fine-tuned RT-DETRv2 (Real-Time Detection Transformer) model for the identification of road surface hazards in the Philippines. The system is designed to provide high-speed, automated detection of potholes and cracks to assist in infrastructure monitoring and road safety.
 
 ## Project Overview
@@ -45,3 +46,5 @@ Citation
       primaryClass={cs.CV},
       url={[https://arxiv.org/abs/2407.17140](https://arxiv.org/abs/2407.17140)}, 
 }
+=======
+>>>>>>> bbbd060af696b8e5132c1abc9e61e1e407d12c85
