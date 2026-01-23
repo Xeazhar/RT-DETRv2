@@ -1,22 +1,13 @@
-# task: detection
-
-# train_dataloader:
-#   dataset: 
-#     img_folder: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/DPWH-sample-Dataset/train/
-#     ann_file: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/DPWH-sample-Dataset/train/instances_train_fixed.json
-
-
-# val_dataloader:
-#   dataset: 
-#     img_folder: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/DPWH-sample-Dataset/validation/
-#     ann_file: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/DPWH-sample-Dataset/validation/instances_validation_fixed.json
+task: detection
 
 train_dataloader:
-  dataset:
-    ann_file: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/RDD-Object-Detection-Dataset/train/subset_100.json
-    img_folder: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/RDD-Object-Detection-Dataset/train/
+  dataset: 
+    img_folder: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/DPWH-sample-Dataset/train/
+    ann_file: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/DPWH-sample-Dataset/train/instances_train_fixed.json
+
 
 val_dataloader:
-  dataset:
-    ann_file: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/RDD-Object-Detection-Dataset/valid/subset_100.json
-    img_folder: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/RDD-Object-Detection-Dataset/valid/
+  dataset: 
+    img_folder: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/DPWH-sample-Dataset/validation/
+    ann_file: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/DPWH-sample-Dataset/validation/instances_validation_fixed.json
+ 
