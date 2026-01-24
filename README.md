@@ -30,16 +30,6 @@ Key training and data settings are located in the following configuration files:
 ### 1. Training and Resuming
 To initiate training or resume from the last saved checkpoint, run the following commands in the terminal:
 
-```cmd
-# Start New Training
-python tools/train.py -c configs/rtdetrv2/rtdetrv2_r50vd_m_7x_coco.yml
-
-#To run Kfold(5)
-
-run_kfold.bat
-
----
-
 Citation
 @misc{lv2024rtdetrv2improvedbaselinebagoffreebies,
       title={RT-DETRv2: Improved Baseline with Bag-of-Freebies for Real-Time Detection Transformer}, 
@@ -50,3 +40,15 @@ Citation
       primaryClass={cs.CV},
       url={[https://arxiv.org/abs/2407.17140](https://arxiv.org/abs/2407.17140)}, 
 }
+
+```cmd
+# Start New Training
+python tools/train.py -c configs/rtdetrv2/rtdetrv2_r50vd_m_7x_coco.yml
+
+#To run Kfold(5)
+
+run_kfold.bat
+
+---
+
+
