@@ -22,33 +22,30 @@ class DetSolver(BaseSolver):
         print(f'number of trainable parameters: {n_parameters}')
 
         best_stat = {'epoch': -1, }
+        
+        # --- EARLY STOPPING CONFIG ---
+        patience_limit = 20
+        patience_counter = 0
+        best_map_score = -1.0
+        # -----------------------------
 
         start_time = time.time()
         start_epoch = self.last_epoch + 1
 
         for epoch in range(start_epoch, args.epoches):
-            # --- FIX: Standard DataLoader on Windows doesn't have set_epoch ---
             if hasattr(self.train_dataloader, 'set_epoch'):
                 self.train_dataloader.set_epoch(epoch)
             
             if dist_utils.is_dist_available_and_initialized():
                 if hasattr(self.train_dataloader.sampler, 'set_epoch'):
                     self.train_dataloader.sampler.set_epoch(epoch)
-            # -----------------------------------------------------------------
             
             train_stats = train_one_epoch(
-                self.model, 
-                self.criterion, 
-                self.train_dataloader, 
-                self.optimizer, 
-                self.device, 
-                epoch, 
-                max_norm=args.clip_max_norm, 
-                print_freq=args.print_freq, 
-                ema=self.ema, 
-                scaler=self.scaler, 
-                lr_warmup_scheduler=self.lr_warmup_scheduler,
-                writer=self.writer
+                self.model, self.criterion, self.train_dataloader, 
+                self.optimizer, self.device, epoch, 
+                max_norm=args.clip_max_norm, print_freq=args.print_freq, 
+                ema=self.ema, scaler=self.scaler, 
+                lr_warmup_scheduler=self.lr_warmup_scheduler, writer=self.writer
             )
 
             if self.lr_warmup_scheduler is None or self.lr_warmup_scheduler.finished():
@@ -56,6 +53,7 @@ class DetSolver(BaseSolver):
             
             self.last_epoch += 1
 
+            # Checkpoints (Last and Periodic)
             if self.output_dir:
                 checkpoint_paths = [self.output_dir / 'last.pth']
                 if (epoch + 1) % args.checkpoint_freq == 0:
@@ -65,24 +63,35 @@ class DetSolver(BaseSolver):
                     self._strip_state_dict(state_dict)
                     dist_utils.save_on_master(state_dict, checkpoint_path)
 
+            # Evaluation
             module = self.ema.module if self.ema else self.model
             test_stats, coco_evaluator = evaluate(
-                module, 
-                self.criterion, 
-                self.postprocessor, 
-                self.val_dataloader, 
-                self.evaluator, 
-                self.device
+                module, self.criterion, self.postprocessor, 
+                self.val_dataloader, self.evaluator, self.device
             )
 
+            # --- EARLY STOPPING LOGIC ---
+            # test_stats['coco_eval_bbox'][0] is the primary mAP metric
+            current_map = test_stats['coco_eval_bbox'][0] if 'coco_eval_bbox' in test_stats else 0
+            
+            if current_map > best_map_score:
+                best_map_score = current_map
+                patience_counter = 0
+                print(f"✨ Improvement! New best mAP: {best_map_score:.4f}")
+            else:
+                patience_counter += 1
+                print(f"⏳ No improvement for {patience_counter}/{patience_limit} epochs.")
+
+            # Best Model Logic
             for k in test_stats:
                 if self.writer and dist_utils.is_main_process():
                     for i, v in enumerate(test_stats[k]):
                         self.writer.add_scalar(f'Test/{k}_{i}'.format(k), v, epoch)
             
                 if k in best_stat:
-                    best_stat['epoch'] = epoch if test_stats[k][0] > best_stat[k] else best_stat['epoch']
-                    best_stat[k] = max(best_stat[k], test_stats[k][0])
+                    if test_stats[k][0] > best_stat[k]:
+                        best_stat['epoch'] = epoch
+                        best_stat[k] = test_stats[k][0]
                 else:
                     best_stat['epoch'] = epoch
                     best_stat[k] = test_stats[k][0]
@@ -94,6 +103,7 @@ class DetSolver(BaseSolver):
 
             print(f'best_stat: {best_stat}')
 
+            # Logging to text file
             log_stats = {
                 **{f'train_{k}': v for k, v in train_stats.items()},
                 **{f'test_{k}': v for k, v in test_stats.items()},
@@ -105,20 +115,14 @@ class DetSolver(BaseSolver):
                 with (self.output_dir / "log.txt").open("a") as f:
                     f.write(json.dumps(log_stats) + "\n")
 
-                if coco_evaluator is not None:
-                    (self.output_dir / 'eval').mkdir(exist_ok=True)
-                    if "bbox" in coco_evaluator.coco_eval:
-                        filenames = ['latest.pth']
-                        if epoch % 50 == 0:
-                            filenames.append(f'{epoch:03}.pth')
-                        for name in filenames:
-                            torch.save(coco_evaluator.coco_eval["bbox"].eval,
-                                    self.output_dir / "eval" / name)
+            # --- THE FINAL STOP ---
+            if patience_counter >= patience_limit:
+                print(f"🛑 Early stopping triggered at epoch {epoch}. No improvement for {patience_limit} epochs.")
+                break # This exits the epoch loop safely
 
         total_time = time.time() - start_time
         total_time_str = str(datetime.timedelta(seconds=int(total_time)))
         print('Training time {}'.format(total_time_str))
-
     def val(self, ):
         self.eval()
         module = self.ema.module if self.ema else self.model
