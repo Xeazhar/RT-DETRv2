@@ -4,7 +4,7 @@ model: RTDETR
 criterion: RTDETRCriterionv2
 postprocessor: RTDETRPostProcessor
 
-num_classes: 5
+num_classes: 4
 
 use_focal_loss: True
 eval_spatial_size: [640, 640] # h w

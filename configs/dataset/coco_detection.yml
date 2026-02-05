@@ -2,12 +2,11 @@ task: detection
 
 train_dataloader:
   dataset: 
-    img_folder: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/DPWH-sample-Dataset/train/
-    ann_file: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/DPWH-sample-Dataset/train/instances_train_fixed.json
+    img_folder: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/Final_Dataset/train/images/
+    ann_file: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/Final_Dataset/train/annotations.json
+
 
 val_dataloader:
   dataset: 
-    # CHANGE THIS: Point it to 'train' because your K-Fold JSONs 
-    # reference images located in the train folder.
-    img_folder: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/DPWH-sample-Dataset/validation/
-    ann_file: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/DPWH-sample-Dataset/validation/instances_validation_fixed.json
+    img_folder: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/Final_Dataset/val/images/
+    ann_file: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/Final_Dataset/val/annotations.json

@@ -17,7 +17,7 @@ RTDETRTransformerv2:
   eval_idx: 2 # use 3th decoder layer to eval
 
 
-epoches: 100
+epoches: 200
 
 optimizer:
   type: AdamW
@@ -39,9 +39,9 @@ train_dataloader:
     type: CocoDetection
     transforms:
       policy:
-        epoch: 100
+        epoch: 200
   collate_fn:
-    stop_epoch: 100
+    stop_epoch: 200
 
 evaluator:
   type: CocoEvaluator
