@@ -15,6 +15,5 @@ python tools/train.py -c configs/rtdetrv2/rtdetrv2_r101vd_6x_coco.yml --use-amp
 python tools/train.py -c configs/rtdetrv2/rtdetrv2_r101vd_6x_coco.yml -r output/rtdetrv2_r101vd_6x_coco/best.pth --use-amp
 #To run Kfold(5)
 
-run_kfold.bat
-
+python tools/train.py -c configs/rtdetrv2/rtdetrv2_r101vd_6x_coco.yml -t rtdetrv2_r101vd_6x_coco_from_paddle.pth --use-amp
 C:\Users\jazzb\rt-deterv2\RT-DETRv2

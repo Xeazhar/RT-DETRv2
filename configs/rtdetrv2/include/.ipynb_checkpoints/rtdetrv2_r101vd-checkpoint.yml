@@ -17,7 +17,7 @@ RTDETR:
   
 
 PResNet:
-  depth: 50
+  depth: 101
   variant: d
   freeze_at: 0
   return_idx: [1, 2, 3]
@@ -31,11 +31,11 @@ HybridEncoder:
   feat_strides: [8, 16, 32]
 
   # intra
-  hidden_dim: 256
+  hidden_dim: 384
   use_encoder_idx: [2]
   num_encoder_layers: 1
   nhead: 8
-  dim_feedforward: 1024
+  dim_feedforward: 2048
   dropout: 0.
   enc_act: 'gelu'
   
@@ -46,7 +46,7 @@ HybridEncoder:
 
 
 RTDETRTransformerv2:
-  feat_channels: [256, 256, 256]
+  feat_channels: [384, 384, 384]
   feat_strides: [8, 16, 32]
   hidden_dim: 256
   num_levels: 3

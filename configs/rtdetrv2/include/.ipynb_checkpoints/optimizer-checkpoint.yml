@@ -7,7 +7,7 @@ ema:
   warmups: 2000
 
 
-epoches: 200
+epoches: 120
 clip_max_norm: 0.1
 
 
@@ -16,7 +16,7 @@ optimizer:
   params: 
     - 
       params: '^(?=.*backbone)(?!.*norm).*$'
-      lr: 0.0001
+      lr: 0.00003
     - 
       params: '^(?=.*(?:encoder|decoder))(?=.*(?:norm|bn)).*$'
       weight_decay: 0.

@@ -5,10 +5,18 @@ train_dataloader:
     img_folder: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/cleaned/train/images/
     ann_file: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/cleaned/train/train.json # Fixed .json.json typo
 
+# val_dataloader:
+#   dataset: 
+#     img_folder: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/cleaned/val/images/
+#     ann_file: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/cleaned/val/val.json
+
+
+
 val_dataloader:
   dataset: 
-    img_folder: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/cleaned/val/images/
-    ann_file: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/cleaned/val/val.json
+    img_folder: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/cleaned/test/images/
+    ann_file: C:/Users/jazzb/rt-deterv2/RT-DETRv2/dataset/cleaned/test/test.json
+
 
 # Add this for final evaluation
 test_dataloader:

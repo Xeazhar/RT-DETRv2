@@ -22,7 +22,7 @@ HybridEncoder:
 RTDETRTransformerv2:
   feat_channels: [384, 384, 384]
 
-epochs: 200
+epochs: 120
 
 
 optimizer:
@@ -30,19 +30,19 @@ optimizer:
   params: 
     - 
       params: '^(?=.*backbone)(?!.*norm|bn).*$'
-      lr: 0.0000001
+      lr: 0.00003
     - 
       params: '^(?=.*(?:encoder|decoder))(?=.*(?:norm|bn)).*$'
       weight_decay: 0.
 
-  lr: 0.000001
+  lr: 0.0001
   betas: [0.9, 0.999]
   weight_decay: 0.0001
 
 # Add this to override the included scheduler
 lr_scheduler:
   type: MultiStepLR
-  milestones: [250] # Push the "drop" far into the future
+  milestones: [85,100] # Push the "drop" far into the future
   gamma: 0.1
 
 train_dataloader: 
@@ -50,9 +50,9 @@ train_dataloader:
     type: CocoDetection
     transforms:
       policy:
-        epoch: 200
+        epoch: 120
   collate_fn:
-    stop_epoch: 200
+    stop_epoch: 70
 
 evaluator:
   type: CocoEvaluator
